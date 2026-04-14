@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+  pubsub-emulator:
+    image: gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators
+    command: >
+      gcloud beta emulators pubsub start
+      --project=eno-local
+      --host-port=0.0.0.0:8085
+    ports:
+      - "8085:8085"
+
+  pubsub-init:
+    image: gcr.io/google.com/cloudsdktool/google-cloud-cli:latest
+    depends_on:
+      - pubsub-emulator
+    environment:
+      PUBSUB_EMULATOR_HOST: pubsub-emulator:8085
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      "gcloud config set project eno-local &&
+       gcloud pubsub topics create alerts || true &&
+       gcloud pubsub subscriptions create alerts-sub --topic=alerts || true"
+
+  pipeline:
+    build: .
+    depends_on:
+      - pubsub-emulator
+      - pubsub-init
+      - subscriber
+    environment:
+      PUBSUB_PROJECT_ID: eno-local
+      PUBSUB_EMULATOR_HOST: pubsub-emulator:8085
+      PUBSUB_TOPIC: alerts
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    volumes:
+      - ./audio:/app/audio
+    command:
+      - python
+      - scripts/run_pipeline.py
+      - --audio
+      - ${AUDIO_FILE:-/app/audio/heated_argument.wav}
+
+  subscriber:
+    build: .
+    depends_on:
+      - pubsub-emulator
+      - pubsub-init
+    environment:
+      PUBSUB_PROJECT_ID: eno-local
+      PUBSUB_EMULATOR_HOST: pubsub-emulator:8085
+      PUBSUB_SUBSCRIPTION: alerts-sub
+    command: ["python", "scripts/run_subscriber.py"]

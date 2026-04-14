@@ -1,0 +1,6 @@
+numpy
+soundfile
+librosa
+python-dotenv
+openai
+google-cloud-pubsub
