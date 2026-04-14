@@ -18,11 +18,14 @@ cd /path/to/eNOugh
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+```
 
 ### 3) .env file
 
 Create a .env file in the repository root and in it write: 
+```
 OPENAI_API_KEY= *your_openai_api_key*
+```
 
 ### 4) Setup audio 
 
@@ -31,20 +34,24 @@ Place the provided sample .wav files into an audio/ directory
 ## 2) Running WAV Harness
 
 Enter the eNOugh directory and run the below locally:
+```
 python scripts/run_pipeline.py --audio audio/*audio file name*
+```
 
 Below is the pipeline flow:
-Segment WAV into turns
-Transcribe each turn
-Run threat assessment + fusion
-Apply incident/action logic
-Publish alert events
-Print formatted alert messages (medium/high)
+- Segment WAV into turns
+- Transcribe each turn
+- Run threat assessment + fusion
+- Apply incident/action logic
+- Publish alert events
+- Print formatted alert messages (medium/high)
 
 ## 3) Docker sandbox run 
 
 To complete the dockerization, simply run 
+```
 docker compose up --build
+```
 
 ## 4) Time breakdown
 
@@ -100,19 +107,19 @@ Return to low/very_low → incident closes and state resets
 #### Alert Schema
 
 Below fields were added: 
-badge_id
-alert_id
-recording_start_time
-turn_start_time
-transcription
-alert_level
-action
-action_reason
+- badge_id
+- alert_id
+- recording_start_time
+- turn_start_time
+- transcription
+- alert_level
+- action
+- action_reason
 
 ## 6) Testing 
-
+```
 python3 -m unittest tests/test_pipeline_basics.py
-
+```
 Tests for the below:
 Alert schema includes exactly required keys
 Non-actionable events are not published
@@ -120,10 +127,10 @@ Actionable events are queued/published
 
 ## 7) Known Limitations
 
-LLM/transcription calls depend on network/API availability and users may not always be in areas that have APIs available
-The weightages I provided are rough estimates. Not strong recommendations
-Noisy environments may affect the boundaries between turns, especially if people are talking over each other. This can make it difficult to assess escalation 
-I have not established how to tell between different speakers. However, this feature is not one of the key features. 
+- LLM/transcription calls depend on network/API availability and users may not always be in areas that have APIs available
+- The weightages I provided are rough estimates. Not strong recommendations
+- Noisy environments may affect the boundaries between turns, especially if people are talking over each other. This can make it difficult to assess escalation 
+- I have not established how to tell between different speakers. However, this feature is not one of the key features. 
 
 ## 8) Notes
 
