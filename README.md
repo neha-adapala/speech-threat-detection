@@ -63,11 +63,11 @@ docker compose up --build
 ## 5) Design Notes
 
 #### VAD / End-of-Turn strategy
-Turn segmentation is silence-based:
-CHUNK_SIZE = 512 samples
-SILENCE_THRESHOLD = 0.03 (RMS)
-SILENCE_DURATION = 0.6s to mark turn end
-Turns shorter than 0.3s are dropped as probable noise. This provides lightweight VAD-like behavior for offline WAV harnessing.
+Turn segmentation is silence-based: \n
+CHUNK_SIZE = 512 samples \n
+SILENCE_THRESHOLD = 0.03 (RMS) \n
+SILENCE_DURATION = 0.6s to mark turn end \n
+Turns shorter than 0.3s are dropped as probable noise. This provides lightweight VAD-like behavior for offline WAV harnessing. \n
 
 #### Signal fusion weights
 Final fused score uses weighted signals:
