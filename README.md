@@ -55,9 +55,9 @@ docker compose up --build
 
 ## 4) Time breakdown
 
-5 hours - online research, looking at given files, decomposing given task, going through tasks 
-8 hours - building the product, refining model to decrease latency
-1 hour - dockerization 
+5 hours - online research, looking at given files, decomposing given task, going through tasks \
+8 hours - building the product, refining model to decrease latency \
+1 hour - dockerization \
 <1 hour - README development 
 
 ## 5) Design Notes
@@ -67,7 +67,7 @@ Turn segmentation is silence-based: \
 CHUNK_SIZE = 512 samples \
 SILENCE_THRESHOLD = 0.03 (RMS) \
 SILENCE_DURATION = 0.6s to mark turn end \
-Turns shorter than 0.3s are dropped as probable noise. This provides lightweight VAD-like behavior for offline WAV harnessing. \
+Turns shorter than 0.3s are dropped as probable noise. This provides lightweight VAD-like behavior for offline WAV harnessing. 
 
 #### Signal fusion weights
 Final fused score uses weighted signals: \
@@ -80,23 +80,23 @@ Audio escalation: 4% \
 If the directionality is ambient, the danger score is capped at 0.15
 
 #### Threshold strategy:
-Two-level thresholding: \
+Two-level thresholding: 
 Severity bands \
 >= 0.75 → critical \
 >= 0.50 → warning \
 >= 0.30 → monitor \
-< 0.30 → safe \
+< 0.30 → safe 
 
-Incident action thresholds \
+Incident action thresholds 
 >= 0.8 → high alert \
 >= 0.6 → medium alert \
 >= 0.3 → low (no active intervention) \
-< 0.3 → very_low (no action) \
+< 0.3 → very_low (no action) 
 
 #### Cooldown / duplicate suppression
 Same/lower incoming level than active action → suppressed \
 Higher level than active action → escalate + fire action \ 
-Return to low/very_low → incident closes and state resets \
+Return to low/very_low → incident closes and state resets 
 
 #### Alert Schema
 
